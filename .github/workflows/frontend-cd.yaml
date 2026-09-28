@@ -90,7 +90,7 @@ jobs:
       - name: Get Backend URL
         run: |
           aws eks update-kubeconfig --name ${{ env.EKS_CLUSTER_NAME }} --region ${{ env.AWS_REGION }}
-          BACKEND_HOST=$(kubectl get service backend -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+          BACKEND_HOST=$(kubectl get service backend -o jsonpath='{.status.loadBalancer.ingress[0].hostname}' 2>/dev/null || true)
           if [ -n "$BACKEND_HOST" ]; then
             echo "REACT_APP_MOVIE_API_URL=http://$BACKEND_HOST" >> $GITHUB_ENV
           elif [ -n "${{ secrets.REACT_APP_MOVIE_API_URL }}" ]; then
